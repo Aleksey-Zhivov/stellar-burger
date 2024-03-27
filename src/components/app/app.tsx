@@ -21,11 +21,25 @@ import {
   useLocation,
   useNavigate
 } from 'react-router-dom';
+import { useDispatch, useSelector } from '../../services/store';
+import {
+  fetchIngredients,
+  selectIngredientsLoading
+} from '../../services/slices/ingredientSlice';
+import { useEffect } from 'react';
 
 const AppRouter = () => {
   const location = useLocation();
   const background = location.state?.background;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isLoading = useSelector(selectIngredientsLoading);
+
+  useEffect(() => {
+    if (!isLoading) {
+      dispatch(fetchIngredients());
+    }
+  }, []);
 
   return (
     <>

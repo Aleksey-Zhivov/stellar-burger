@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
@@ -11,32 +11,29 @@ interface IngredientListState {
 
 const initialState: IngredientListState = {
   ingredients: [],
-  isIngredientsLoading: true,
+  isIngredientsLoading: false,
   error: null
 };
 
 export const fetchIngredients = createAsyncThunk(
-  `ingredients/fetchIngredients`,
-  async () => {
-    const result = await getIngredientsApi();
-    return result;
-  }
+  'ingredients/fetchIngredients',
+  async () => getIngredientsApi()
 );
 
 const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {
-    setIngredientsLoading: (state) => {
+    getIngredients: (state) => {
       state.isIngredientsLoading = false;
     },
-    ingredientsAdded: (state, action) => {
+    getIngredientsAdded: (state, action) => {
       state.ingredients.push(action.payload);
     }
   },
   selectors: {
-    getIngredients: (state) => state.ingredients,
-    getIngredientsLoading: (state) => state.isIngredientsLoading
+    selectIngredients: (state) => state.ingredients,
+    selectIngredientsLoading: (state) => state.isIngredientsLoading
   },
   extraReducers(builder) {
     builder
@@ -55,6 +52,6 @@ const ingredientsSlice = createSlice({
   }
 });
 
-export const { getIngredients, getIngredientsLoading } =
+export const { selectIngredients, selectIngredientsLoading } =
   ingredientsSlice.selectors;
 export const ingredientsReducer = ingredientsSlice.reducer;
