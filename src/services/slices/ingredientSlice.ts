@@ -3,13 +3,13 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 
-interface IngredientListState {
+interface IIngredientSliceState {
   ingredients: TIngredient[];
   isIngredientsLoading: boolean;
   error: string | null;
 }
 
-const initialState: IngredientListState = {
+const initialState: IIngredientSliceState = {
   ingredients: [],
   isIngredientsLoading: false,
   error: null
