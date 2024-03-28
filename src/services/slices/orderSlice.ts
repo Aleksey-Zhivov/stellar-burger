@@ -25,8 +25,8 @@ const orderSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    getOrderIsLoading: (state) => state.orderIsLoading,
-    getOrder: (state) => state.order
+    selectOrderIsLoading: (state) => state.orderIsLoading,
+    selectOrder: (state) => state.order
   },
   extraReducers(builder) {
     builder
@@ -45,5 +45,5 @@ const orderSlice = createSlice({
   }
 });
 
-export const { getOrderIsLoading, getOrder } = orderSlice.selectors;
+export const { selectOrderIsLoading, selectOrder } = orderSlice.selectors;
 export const orderReducer = orderSlice.reducer;

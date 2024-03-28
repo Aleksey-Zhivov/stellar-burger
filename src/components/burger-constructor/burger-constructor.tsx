@@ -5,15 +5,15 @@ import { useDispatch, useSelector } from '../../services/store';
 import { selectConstructorBurger } from '../../services/slices/burgerCunstructorSlice';
 import {
   fetchOrderBurgerApi,
-  getOrder,
-  getOrderIsLoading
+  selectOrder,
+  selectOrderIsLoading
 } from '../../services/slices/orderSlice';
 import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const items = useSelector(selectConstructorBurger).constructorItems;
-  const orderRequest = useSelector(getOrderIsLoading);
-  const orderModalData = useSelector(getOrder);
+  const orderRequest = useSelector(selectOrderIsLoading);
+  const orderModalData = useSelector(selectOrder);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,13 +24,14 @@ export const BurgerConstructor: FC = () => {
         ...items.ingredients.map((ingredient) => ingredient.id)
       ];
       dispatch(fetchOrderBurgerApi(order));
+      console.log(items.bun.id);
     } else {
       console.log('Сначала соберите свой вкуснейший бургер!');
     }
   };
 
   const closeOrderModal = () => {
-    navigate(-1);
+    navigate('/feed');
   };
 
   const price = useMemo(
