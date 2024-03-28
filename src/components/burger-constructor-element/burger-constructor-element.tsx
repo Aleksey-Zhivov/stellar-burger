@@ -5,21 +5,24 @@ import { useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import {
   removeIngredient,
-  upIngredient
+  ingredientsToUp,
+  ingredientsToDown
 } from '../../services/slices/burgerCunstructorSlice';
 
 export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
   ({ ingredient, index, totalItems }) => {
     const dispatch = useDispatch();
 
-    const handleMoveDown = () => {};
+    const handleMoveDown = () => {
+      dispatch(ingredientsToDown(index));
+    };
 
     const handleMoveUp = () => {
-      dispatch(upIngredient(ingredient._id));
+      dispatch(ingredientsToUp(index));
     };
 
     const handleClose = () => {
-      dispatch(removeIngredient(ingredient._id));
+      dispatch(removeIngredient(ingredient));
     };
 
     return (

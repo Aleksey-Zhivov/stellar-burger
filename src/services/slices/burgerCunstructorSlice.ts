@@ -1,10 +1,12 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { TConstructorIngredient } from '@utils-types';
 
+const randomId = () => self.crypto.randomUUID();
+
 interface IBurgerConstructorSliceState {
   constructorItems: {
-    bun: TConstructorIngredient | undefined;
+    bun: TConstructorIngredient | null;
     ingredients: TConstructorIngredient[];
   };
   isIngredientsLoading: boolean;
@@ -13,7 +15,7 @@ interface IBurgerConstructorSliceState {
 
 const initialState: IBurgerConstructorSliceState = {
   constructorItems: {
-    bun: undefined,
+    bun: null,
     ingredients: []
   },
   isIngredientsLoading: false,
@@ -24,25 +26,56 @@ export const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngredient: (state, action) => {
+    addIngredients: (state, action) => {
       if (action.payload.type === 'bun') {
         state.constructorItems.bun = action.payload;
-      } else if (action.payload.type === 'main') {
-        state.constructorItems.ingredients.push(action.payload);
-      } else if (action.payload.type === 'sauce') {
-        state.constructorItems.ingredients.push(action.payload);
+      } else if (
+        action.payload.type === 'main' ||
+        action.payload.type === 'sauce'
+      ) {
+        state.constructorItems.ingredients.push({
+          id: randomId(),
+          ...action.payload
+        });
+      } else {
+        state.error = 'Неизвестный ингредиент, не стоит его добавлять :)';
+        alert(state.error);
       }
     },
-    upIngredient: (state, action) => {
-      const { id } = action.payload;
-      console.log(id);
+    ingredientsToUp: (state, action) => {
+      const currentIngredient =
+        state.constructorItems.ingredients[action.payload];
+
+      const neighbourIngredient =
+        state.constructorItems.ingredients[action.payload - 1];
+
+      state.constructorItems.ingredients.splice(
+        action.payload - 1,
+        2,
+        currentIngredient,
+        neighbourIngredient
+      );
+    },
+    ingredientsToDown: (state, action) => {
+      const currentIngredient =
+        state.constructorItems.ingredients[action.payload];
+
+      const neighbourIngredient =
+        state.constructorItems.ingredients[action.payload + 1];
+
+      state.constructorItems.ingredients.splice(
+        action.payload,
+        2,
+        neighbourIngredient,
+        currentIngredient
+      );
     },
     removeIngredient: (state, action) => {
-      const { id } = action.payload;
       state.constructorItems.ingredients =
-        state.constructorItems.ingredients.filter((ingredient) => {
-          ingredient._id != id;
-        });
+        state.constructorItems.ingredients.filter(
+          (ingredient) => ingredient.id != action.payload.id
+        );
+      console.log(action.payload.id);
     }
   },
   selectors: {
@@ -52,5 +85,9 @@ export const burgerConstructorSlice = createSlice({
 
 export const burgerConstructorReducer = burgerConstructorSlice.reducer;
 export const { selectConstructorBurger } = burgerConstructorSlice.selectors;
-export const { addIngredient, upIngredient, removeIngredient } =
-  burgerConstructorSlice.actions;
+export const {
+  addIngredients,
+  ingredientsToUp,
+  ingredientsToDown,
+  removeIngredient
+} = burgerConstructorSlice.actions;
