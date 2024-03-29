@@ -40,9 +40,11 @@ const ingredientsSlice = createSlice({
       .addCase(fetchIngredients.pending, (state) => {
         state.isIngredientsLoading = true;
       })
-      .addCase(fetchIngredients.rejected, (state) => {
+      .addCase(fetchIngredients.rejected, (state, action) => {
         state.isIngredientsLoading = false;
-        state.error = 'Ошибка загрузки ингредиентов';
+        action.error.message
+          ? (state.error = action.error.message)
+          : (state.error = '');
         console.log(state.error);
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {

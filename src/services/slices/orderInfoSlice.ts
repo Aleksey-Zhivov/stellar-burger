@@ -33,9 +33,11 @@ const orderByNumberSlice = createSlice({
       .addCase(fetchOrderByNumber.pending, (state) => {
         state.orderIsLoading = true;
       })
-      .addCase(fetchOrderByNumber.rejected, (state) => {
+      .addCase(fetchOrderByNumber.rejected, (state, action) => {
         state.orderIsLoading = false;
-        state.error = 'Ошибка получения заказа по номеру.';
+        action.error.message
+          ? (state.error = action.error.message)
+          : (state.error = '');
         console.log(state.error);
       })
       .addCase(fetchOrderByNumber.fulfilled, (state, action) => {

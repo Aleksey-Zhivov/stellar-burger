@@ -38,10 +38,11 @@ const orderSlice = createSlice({
       .addCase(fetchOrderBurgerApi.pending, (state) => {
         state.orderIsLoading = true;
       })
-      .addCase(fetchOrderBurgerApi.rejected, (state) => {
+      .addCase(fetchOrderBurgerApi.rejected, (state, action) => {
         state.orderIsLoading = false;
-        state.error =
-          'Ошибка отправки заказа: сначала необходимо авторизоваться!';
+        action.error.message
+          ? (state.error = action.error.message)
+          : (state.error = '');
         console.log(state.error);
       })
       .addCase(fetchOrderBurgerApi.fulfilled, (state, action) => {

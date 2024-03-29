@@ -38,9 +38,11 @@ const feedSlice = createSlice({
       .addCase(fetchFeedsApi.pending, (state) => {
         state.feedIsLoading = true;
       })
-      .addCase(fetchFeedsApi.rejected, (state) => {
+      .addCase(fetchFeedsApi.rejected, (state, action) => {
         state.feedIsLoading = false;
-        state.error = 'Ошибка загрузки заказов';
+        action.error.message
+          ? (state.error = action.error.message)
+          : (state.error = '');
         console.log(state.error);
       })
       .addCase(fetchFeedsApi.fulfilled, (state, action) => {
