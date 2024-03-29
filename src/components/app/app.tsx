@@ -27,6 +27,7 @@ import {
   selectIngredientsLoading
 } from '../../services/slices/ingredientSlice';
 import { useEffect } from 'react';
+import { fetchFeedsApi } from '../../services/slices/feedSlice';
 
 const AppRouter = () => {
   const location = useLocation();
@@ -38,6 +39,7 @@ const AppRouter = () => {
   useEffect(() => {
     if (!isLoading) {
       dispatch(fetchIngredients());
+      dispatch(fetchFeedsApi());
     }
   }, []);
 

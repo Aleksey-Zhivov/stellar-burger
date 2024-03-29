@@ -8,15 +8,20 @@ import { fetchFeedsApi, selectFeeds } from '../../services/slices/feedSlice';
 export const Feed: FC = () => {
   const orders: TOrder[] = useSelector(selectFeeds);
   const dispatch = useDispatch();
-  console.log(orders.length);
 
   useEffect(() => {
     dispatch(fetchFeedsApi());
-  }, [orders.length]);
+  }, [dispatch]);
 
   if (!orders.length) {
     return <Preloader />;
   }
 
-  <FeedUI orders={orders} handleGetFeeds={() => dispatch(fetchFeedsApi())} />;
+  return (
+    /*
+    отсутсвие этого return в базовом коде меня просто убило... 
+    7 часов на поиски того, что не так - это просто спасибо большое авторам задания:)
+    */
+    <FeedUI orders={orders} handleGetFeeds={() => dispatch(fetchFeedsApi())} />
+  );
 };

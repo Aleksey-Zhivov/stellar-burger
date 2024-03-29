@@ -39,7 +39,7 @@ export const burgerConstructorSlice = createSlice({
         });
       } else {
         state.error = 'Неизвестный ингредиент, не стоит его добавлять :)';
-        alert(state.error);
+        console.log(state.error);
       }
     },
     ingredientsToUp: (state, action) => {
@@ -75,7 +75,11 @@ export const burgerConstructorSlice = createSlice({
         state.constructorItems.ingredients.filter(
           (ingredient) => ingredient.id != action.payload.id
         );
-      console.log(action.payload.id);
+    },
+    clearConstructor: (state) => {
+      state.constructorItems.bun = null;
+      state.constructorItems.ingredients = [];
+      state.isIngredientsLoading = false;
     }
   },
   selectors: {
@@ -89,5 +93,6 @@ export const {
   addIngredients,
   ingredientsToUp,
   ingredientsToDown,
-  removeIngredient
+  removeIngredient,
+  clearConstructor
 } = burgerConstructorSlice.actions;

@@ -23,7 +23,12 @@ export const fetchOrderBurgerApi = createAsyncThunk(
 const orderSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {},
+  reducers: {
+    clearOrder: (state) => {
+      state.order = null;
+      state.orderIsLoading = false;
+    }
+  },
   selectors: {
     selectOrderIsLoading: (state) => state.orderIsLoading,
     selectOrder: (state) => state.order
@@ -35,7 +40,8 @@ const orderSlice = createSlice({
       })
       .addCase(fetchOrderBurgerApi.rejected, (state) => {
         state.orderIsLoading = false;
-        state.error = 'Ошибка загрузки ингредиентов';
+        state.error =
+          'Ошибка отправки заказа: сначала необходимо авторизоваться!';
         console.log(state.error);
       })
       .addCase(fetchOrderBurgerApi.fulfilled, (state, action) => {
@@ -45,5 +51,6 @@ const orderSlice = createSlice({
   }
 });
 
+export const { clearOrder } = orderSlice.actions;
 export const { selectOrderIsLoading, selectOrder } = orderSlice.selectors;
 export const orderReducer = orderSlice.reducer;
