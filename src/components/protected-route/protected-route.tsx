@@ -1,7 +1,9 @@
 import { useSelector } from '../../services/store';
-import { selectIsAuth, selectUserData } from '../../services/slices/authSlice';
+import {
+  selectIsAuthenticated,
+  selectUserData
+} from '../../services/slices/authSlice';
 import { Navigate, useLocation } from 'react-router';
-import { Preloader } from '../ui/preloader';
 import { ReactElement } from 'react';
 
 type ProtectedRouteProps = {
@@ -12,23 +14,19 @@ type ProtectedRouteProps = {
 export const ProtectedRoute = ({
   onlyUnAuth,
   children
-}: ProtectedRouteProps) => {
-  const isAuthChecked = useSelector(selectIsAuth);
-  const user = useSelector(selectUserData);
+}: ProtectedRouteProps): ReactElement => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const location = useLocation();
+  const from = location.state?.from || { pathname: '/' };
 
-  if (!isAuthChecked) {
-    return <Preloader />;
+  if (!onlyUnAuth && !isAuthenticated) {
+    //нужна авторизаия, пользователь НЕ авторизован
+    return <Navigate replace to='/login' state={from} />;
   }
 
-  if (!onlyUnAuth && !user) {
-    return <Navigate replace to='/login' state={{ from: location }} />;
-  }
-
-  if (onlyUnAuth && user) {
-    const from = location.state?.from || { pathname: '/' };
-
-    return <Navigate replace to={from} />;
+  if (onlyUnAuth && isAuthenticated) {
+    //НЕ нужна авторизация, пользователь авторизован
+    return <Navigate replace to='/profile' state={from} />;
   }
 
   return children;

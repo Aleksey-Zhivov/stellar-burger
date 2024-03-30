@@ -4,20 +4,15 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   clearErrorMessage,
   fetchRegisterUser,
-  selectError,
-  selectIsAuthenticated
+  selectError
 } from '../../services/slices/authSlice';
-import { Navigate, useNavigate } from 'react-router-dom';
 
 export const Register: FC = () => {
   const [name, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const errorMessage = useSelector(selectError);
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  const navigate = useNavigate();
-  const [error, setError] = useState('');
+  const error = useSelector(selectError);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -27,10 +22,6 @@ export const Register: FC = () => {
   useEffect(() => {
     dispatch(clearErrorMessage());
   }, []);
-
-  if (isAuthenticated) {
-    return <Navigate to={'/'} />;
-  }
 
   return (
     <RegisterUI

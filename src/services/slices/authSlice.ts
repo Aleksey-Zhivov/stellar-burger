@@ -5,13 +5,11 @@ import {
   updateUserApi,
   logoutApi,
   TRegisterData,
-  TLoginData,
-  TRefreshResponse
+  TLoginData
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { access } from 'fs';
-import { setCookie } from '../../utils/cookie';
+import { deleteCookie, setCookie } from '../../utils/cookie';
 
 export const fetchRegisterUser = createAsyncThunk(
   'register/fetchRegisterUser',
@@ -37,7 +35,6 @@ export const fetchLogout = createAsyncThunk('logout/fetchLogout', async () =>
 );
 
 interface TAuthState {
-  isAuthChecked: boolean;
   isAuthenticated: boolean;
   data: TUser;
   error: string;
@@ -45,7 +42,6 @@ interface TAuthState {
 }
 
 const initialState: TAuthState = {
-  isAuthChecked: false,
   isAuthenticated: false,
   data: {
     name: '',
@@ -65,7 +61,6 @@ const authSlice = createSlice({
   },
   selectors: {
     selectUserData: (state) => state.data,
-    selectIsAuth: (state) => state.isAuthChecked,
     selectIsAuthenticated: (state) => state.isAuthenticated,
     selectError: (state) => state.error
   },
@@ -112,10 +107,10 @@ const authSlice = createSlice({
       })
       //Получение данных юзера
       .addCase(fetchGetUser.pending, (state) => {
-        state.isAuthenticated = false;
+        state.loginUserRequest = true;
       })
       .addCase(fetchGetUser.rejected, (state, action) => {
-        state.isAuthenticated = false;
+        state.loginUserRequest = true;
         action.error.message
           ? (state.error = action.error.message)
           : (state.error = '');
@@ -124,13 +119,14 @@ const authSlice = createSlice({
         state.data = action.payload.user;
         state.error = '';
         state.isAuthenticated = true;
+        state.loginUserRequest = false;
       })
       //Обвнолвение данные пользователя
       .addCase(fetchUpdateUser.pending, (state) => {
-        state.isAuthenticated = false;
+        state.loginUserRequest = true;
       })
       .addCase(fetchUpdateUser.rejected, (state, action) => {
-        state.isAuthenticated = false;
+        state.loginUserRequest = true;
         action.error.message
           ? (state.error = action.error.message)
           : (state.error = '');
@@ -138,27 +134,28 @@ const authSlice = createSlice({
       .addCase(fetchUpdateUser.fulfilled, (state, action) => {
         state.data = action.payload.user;
         state.isAuthenticated = true;
+        state.loginUserRequest = false;
       })
       //Выход
       .addCase(fetchLogout.pending, (state) => {
-        state.isAuthenticated = false;
+        state.loginUserRequest = true;
       })
       .addCase(fetchLogout.rejected, (state, action) => {
         action.error.message
           ? (state.error = action.error.message)
           : (state.error = '');
+        state.loginUserRequest = true;
       })
       .addCase(fetchLogout.fulfilled, (state) => {
         state.isAuthenticated = true;
+        state.loginUserRequest = false;
+        deleteCookie('accessToken');
+        localStorage.removeItem('refreshToken');
       });
   }
 });
 
 export const { clearErrorMessage } = authSlice.actions;
-export const {
-  selectUserData,
-  selectIsAuth,
-  selectError,
-  selectIsAuthenticated
-} = authSlice.selectors;
+export const { selectUserData, selectError, selectIsAuthenticated } =
+  authSlice.selectors;
 export const authReducer = authSlice.reducer;

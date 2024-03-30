@@ -33,10 +33,7 @@ import {
 } from '../../services/slices/ingredientSlice';
 import { useEffect } from 'react';
 import { fetchFeedsApi } from '../../services/slices/feedSlice';
-import {
-  fetchGetUser,
-  selectIsAuthenticated
-} from '../../services/slices/authSlice';
+import { fetchGetUser } from '../../services/slices/authSlice';
 
 const AppRouter = () => {
   const location = useLocation();
@@ -44,7 +41,6 @@ const AppRouter = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIngredientsLoading);
-  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   useEffect(() => {
     if (!isLoading) {
@@ -101,8 +97,22 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         />
-        <Route path='/profile/orders' element={<ProfileOrders />} />
-        <Route path='/profile/orders/:number' element={<OrderInfo />} />
+        <Route
+          path='/profile/orders'
+          element={
+            <ProtectedRoute>
+              <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
@@ -127,9 +137,14 @@ const AppRouter = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title={'Информация о заказе'} onClose={() => navigate(-1)}>
-                <OrderInfo />
-              </Modal>
+              <ProtectedRoute>
+                <Modal
+                  title={'Информация о заказе'}
+                  onClose={() => navigate(-1)}
+                >
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
             }
           />
         </Routes>

@@ -13,6 +13,8 @@ import {
   selectOrderIsLoading
 } from '../../services/slices/orderSlice';
 import { useNavigate } from 'react-router-dom';
+import { selectIsAuthenticated } from '../../services/slices/authSlice';
+import { getCookie } from '../../utils/cookie';
 
 export const BurgerConstructor: FC = () => {
   const items = useSelector(selectConstructorBurger).constructorItems;
@@ -20,21 +22,27 @@ export const BurgerConstructor: FC = () => {
   const orderModalData = useSelector(selectOrder);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const onOrderClick = () => {
-    if (items.bun) {
-      const order: string[] = [
-        items.bun!._id,
-        ...items.ingredients.map((ingredient) => ingredient.id)
-      ];
-      dispatch(fetchOrderBurgerApi(order));
+    console.log(getCookie('accessToken'));
+    if (isAuthenticated) {
+      if (items.bun) {
+        const order: string[] = [
+          items.bun!._id,
+          ...items.ingredients.map((ingredient) => ingredient.id)
+        ];
+        dispatch(fetchOrderBurgerApi(order));
+      } else {
+        alert('Сначала соберите свой вкуснейший бургер!');
+      }
     } else {
-      alert('Сначала соберите свой вкуснейший бургер!');
+      navigate('/login');
     }
   };
 
   const closeOrderModal = () => {
-    navigate('/');
+    navigate('/', { replace: true });
     dispatch(clearOrder());
     dispatch(clearConstructor());
   };
