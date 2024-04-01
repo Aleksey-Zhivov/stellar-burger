@@ -1,8 +1,5 @@
 import { useSelector } from '../../services/store';
-import {
-  selectIsAuthenticated,
-  selectUserData
-} from '../../services/slices/authSlice';
+import { selectIsAuthenticated } from '../../services/slices/authSlice';
 import { Navigate, useLocation } from 'react-router';
 import { ReactElement } from 'react';
 
@@ -17,17 +14,19 @@ export const ProtectedRoute = ({
 }: ProtectedRouteProps): ReactElement => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const location = useLocation();
-  const from = location.state?.from || { pathname: '/' };
+  const from = { pathname: '/' };
 
   if (!onlyUnAuth && !isAuthenticated) {
     //нужна авторизаия, пользователь НЕ авторизован
-    return <Navigate replace to='/login' state={from} />;
+    return <Navigate to='/login' state={{ from: location }} />;
   }
 
   if (onlyUnAuth && isAuthenticated) {
     //НЕ нужна авторизация, пользователь авторизован
     return <Navigate replace to='/profile' state={from} />;
   }
+
+  //кажется, есть третий путь, но пока не понятно какой..
 
   return children;
 };

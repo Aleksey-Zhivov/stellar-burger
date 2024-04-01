@@ -4,7 +4,6 @@ import styles from './constructor-page.module.css';
 import { Preloader } from '@ui';
 import { BurgerConstructor, BurgerIngredients } from '@components';
 import { FC } from 'react';
-import { selectIngredientsLoading } from '../../services/slices/ingredientSlice';
 import { useSelector } from '../../services/store';
 
 export const ConstructorPage: FC = () => {

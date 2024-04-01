@@ -29,8 +29,9 @@ export const BurgerConstructor: FC = () => {
     if (isAuthenticated) {
       if (items.bun) {
         const order: string[] = [
-          items.bun!._id,
-          ...items.ingredients.map((ingredient) => ingredient.id)
+          items.bun._id,
+          ...items.ingredients.map((ingredient) => ingredient._id),
+          items.bun._id
         ];
         dispatch(fetchOrderBurgerApi(order));
       } else {

@@ -69,14 +69,12 @@ const authSlice = createSlice({
       //Регистрация
       .addCase(fetchRegisterUser.pending, (state) => {
         state.isAuthenticated = false;
-        state.loginUserRequest = true;
       })
       .addCase(fetchRegisterUser.rejected, (state, action) => {
         state.isAuthenticated = false;
         action.error.message
           ? (state.error = action.error.message)
           : (state.error = '');
-        state.loginUserRequest = false;
       })
       .addCase(fetchRegisterUser.fulfilled, (state, action) => {
         state.isAuthenticated = true;
@@ -84,26 +82,22 @@ const authSlice = createSlice({
         state.data.name = action.payload.user.name;
         setCookie('accessToken', action.payload.accessToken);
         localStorage.setItem('refreshToken', action.payload.refreshToken);
-        state.loginUserRequest = false;
       })
       //Авторизация
       .addCase(fetchLoginUser.pending, (state) => {
         state.isAuthenticated = false;
-        state.loginUserRequest = true;
       })
       .addCase(fetchLoginUser.rejected, (state, action) => {
         state.isAuthenticated = false;
         action.error.message
           ? (state.error = action.error.message)
           : (state.error = '');
-        state.loginUserRequest = false;
       })
       .addCase(fetchLoginUser.fulfilled, (state, action) => {
         state.isAuthenticated = true;
         state.data.email = action.payload.user.name;
         setCookie('accessToken', action.payload.accessToken);
         localStorage.setItem('refreshToken', action.payload.refreshToken);
-        state.loginUserRequest = false;
       })
       //Получение данных юзера
       .addCase(fetchGetUser.pending, (state) => {
