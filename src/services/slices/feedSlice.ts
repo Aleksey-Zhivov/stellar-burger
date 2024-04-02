@@ -8,7 +8,7 @@ interface IFeedSliceState {
   feedIsLoading: boolean;
   total: number;
   totalToday: number;
-  error: string | null;
+  error: string | undefined;
 }
 
 const initialState: IFeedSliceState = {
@@ -16,7 +16,7 @@ const initialState: IFeedSliceState = {
   feedIsLoading: false,
   total: 0,
   totalToday: 0,
-  error: null
+  error: undefined
 };
 
 export const fetchFeedsApi = createAsyncThunk('feed/fetchFeedsApi', async () =>
@@ -40,10 +40,7 @@ const feedSlice = createSlice({
       })
       .addCase(fetchFeedsApi.rejected, (state, action) => {
         state.feedIsLoading = false;
-        action.error.message
-          ? (state.error = action.error.message)
-          : (state.error = '');
-        console.log(state.error);
+        state.error = action.error.message;
       })
       .addCase(fetchFeedsApi.fulfilled, (state, action) => {
         state.feedIsLoading = false;

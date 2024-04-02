@@ -28,46 +28,58 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
               )}
               to={'/'}
             >
-              <BurgerIcon type={'primary'} />
+              <BurgerIcon
+                type={currentLocation === '/' ? 'primary' : 'secondary'}
+              />
               <p className='text text_type_main-default ml-2 mr-10'>
                 Конструктор
               </p>
             </Link>
           </>
           <>
-            <ListIcon type={'primary'} />
-            <p className='text text_type_main-default ml-2'>
-              <Link
-                className={clsx(
-                  styles.link,
-                  currentLocation === '/feed'
-                    ? [styles.link_active, styles.link]
-                    : styles.link
-                )}
-                to={'/feed'}
-              >
-                Лента заказов
-              </Link>
-            </p>
+            <Link
+              className={clsx(
+                styles.link,
+                currentLocation === '/feed'
+                  ? [styles.link_active, styles.link]
+                  : styles.link
+              )}
+              to={'/feed'}
+            >
+              <ListIcon
+                type={currentLocation === '/feed' ? 'primary' : 'secondary'}
+              />
+              <p className='text text_type_main-default ml-2'>Лента заказов</p>
+            </Link>
           </>
         </div>
         <div className={styles.logo}>
           <Logo className='' />
         </div>
         <div className={styles.link_position_last}>
-          <ProfileIcon type={'primary'} />
-          <p className='text text_type_main-default ml-2'>
-            <Link
-              className={clsx(
-                currentLocation === '/profile'
-                  ? [styles.link_active, styles.link]
-                  : styles.link
-              )}
-              to={'/login'}
-            >
+          <ProfileIcon
+            type={
+              currentLocation === '/profile' ||
+              currentLocation === '/profile/orders' ||
+              currentLocation === '/profile/orders/:number'
+                ? 'primary'
+                : 'secondary'
+            }
+          />
+          <Link
+            className={clsx(
+              currentLocation === '/profile' ||
+                currentLocation === '/profile/orders' ||
+                currentLocation === '/profile/orders/:number'
+                ? [styles.link_active, styles.link]
+                : styles.link
+            )}
+            to={'/profile'}
+          >
+            <p className='text text_type_main-default ml-2'>
               {userName || 'Личный кабинет'}
-            </Link>
-          </p>
+            </p>
+          </Link>
         </div>
       </nav>
     </header>

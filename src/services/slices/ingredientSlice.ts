@@ -1,18 +1,18 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { getIngredientsApi } from '@api';
-import { TIngredient } from '@utils-types';
+import { TConstructorIngredient, TIngredient } from '@utils-types';
 
 interface IIngredientSliceState {
   ingredients: TIngredient[];
   isIngredientsLoading: boolean;
-  error: string | null;
+  error: string | undefined;
 }
 
 const initialState: IIngredientSliceState = {
   ingredients: [],
   isIngredientsLoading: false,
-  error: null
+  error: undefined
 };
 
 export const fetchIngredients = createAsyncThunk(
@@ -27,8 +27,11 @@ const ingredientsSlice = createSlice({
     getIngredients: (state) => {
       state.isIngredientsLoading = false;
     },
-    getIngredientsAdded: (state, action) => {
-      state.ingredients.push(action.payload);
+    getIngredientsAdded: (
+      state,
+      { payload }: PayloadAction<TConstructorIngredient>
+    ) => {
+      state.ingredients.push(payload);
     }
   },
   selectors: {
@@ -42,10 +45,7 @@ const ingredientsSlice = createSlice({
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.isIngredientsLoading = false;
-        action.error.message
-          ? (state.error = action.error.message)
-          : (state.error = '');
-        console.log(state.error);
+        state.error = action.error.message;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
         state.isIngredientsLoading = false;

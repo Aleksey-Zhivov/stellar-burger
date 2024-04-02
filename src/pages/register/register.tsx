@@ -16,7 +16,8 @@ export const Register: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(fetchRegisterUser({ name, email, password }));
+    const data = { name, email, password };
+    dispatch(fetchRegisterUser(data));
   };
 
   useEffect(() => {

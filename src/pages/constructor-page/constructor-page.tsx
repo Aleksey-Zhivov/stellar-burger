@@ -7,7 +7,6 @@ import { FC } from 'react';
 import { useSelector } from '../../services/store';
 
 export const ConstructorPage: FC = () => {
-  /** TODO: взять переменную из стора */
   const isIngredientsLoading = useSelector(
     (store) => store.burgerConstructor.isIngredientsLoading
   );

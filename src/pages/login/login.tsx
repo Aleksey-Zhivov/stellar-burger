@@ -6,16 +6,20 @@ import {
   fetchLoginUser,
   selectError
 } from '../../services/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const Login: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const error = useSelector(selectError);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(fetchLoginUser({ email, password }));
+    const data = { email, password };
+    dispatch(fetchLoginUser(data));
+    navigate('/');
   };
 
   useEffect(() => {

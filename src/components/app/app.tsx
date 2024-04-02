@@ -26,13 +26,9 @@ import {
   useLocation,
   useNavigate
 } from 'react-router-dom';
-import { useDispatch, useSelector } from '../../services/store';
-import {
-  fetchIngredients,
-  selectIngredientsLoading
-} from '../../services/slices/ingredientSlice';
+import { useDispatch } from '../../services/store';
+import { fetchIngredients } from '../../services/slices/ingredientSlice';
 import { useEffect } from 'react';
-import { fetchFeedsApi } from '../../services/slices/feedSlice';
 import { fetchGetUser } from '../../services/slices/authSlice';
 
 const AppRouter = () => {
@@ -40,14 +36,10 @@ const AppRouter = () => {
   const background = location.state?.background;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectIngredientsLoading);
 
   useEffect(() => {
-    if (!isLoading) {
-      dispatch(fetchIngredients());
-      dispatch(fetchFeedsApi());
-      dispatch(fetchGetUser());
-    }
+    dispatch(fetchIngredients());
+    dispatch(fetchGetUser());
   }, []);
 
   return (
@@ -105,14 +97,7 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path='/profile/orders/:number'
-          element={
-            <ProtectedRoute>
-              <OrderInfo />
-            </ProtectedRoute>
-          }
-        />
+        <Route path='/profile/orders/:number' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
@@ -137,14 +122,9 @@ const AppRouter = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <ProtectedRoute>
-                <Modal
-                  title={'Информация о заказе'}
-                  onClose={() => navigate(-1)}
-                >
-                  <OrderInfo />
-                </Modal>
-              </ProtectedRoute>
+              <Modal title={'Информация о заказе'} onClose={() => navigate(-1)}>
+                <OrderInfo />
+              </Modal>
             }
           />
         </Routes>

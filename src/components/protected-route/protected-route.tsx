@@ -1,7 +1,12 @@
 import { useSelector } from '../../services/store';
-import { selectIsAuthenticated } from '../../services/slices/authSlice';
+import {
+  selectIsAuthenticated,
+  selectUserData
+} from '../../services/slices/authSlice';
 import { Navigate, useLocation } from 'react-router';
 import { ReactElement } from 'react';
+import { Preloader } from '../ui/preloader';
+import { useParams } from 'react-router-dom';
 
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;
@@ -9,24 +14,26 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({
-  onlyUnAuth,
+  onlyUnAuth = false,
   children
 }: ProtectedRouteProps): ReactElement => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isAuthChecked = useSelector((state) => state.auth.isAuthenticated);
+  const loginRequested = useSelector((state) => state.auth.loginUserRequest);
+  const user = useSelector((state) => state.auth.data.name);
   const location = useLocation();
-  const from = { pathname: '/' };
+  const from = location.state?.from || { pathname: '/' };
 
-  if (!onlyUnAuth && !isAuthenticated) {
-    //нужна авторизаия, пользователь НЕ авторизован
-    return <Navigate to='/login' state={{ from: location }} />;
+  if (!isAuthChecked && loginRequested) {
+    return <Preloader />;
   }
 
-  if (onlyUnAuth && isAuthenticated) {
-    //НЕ нужна авторизация, пользователь авторизован
+  if (onlyUnAuth && user) {
     return <Navigate replace to='/profile' state={from} />;
   }
 
-  //кажется, есть третий путь, но пока не понятно какой..
+  if (!onlyUnAuth && !user) {
+    return <Navigate to='/login' state={{ from: location }} />;
+  }
 
   return children;
 };

@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { TConstructorIngredient } from '@utils-types';
+import { TConstructorIngredient, TIngredient } from '@utils-types';
 
 const randomId = () => self.crypto.randomUUID();
 
@@ -26,54 +26,51 @@ export const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngredients: (state, action) => {
-      if (action.payload.type === 'bun') {
-        state.constructorItems.bun = action.payload;
-      } else if (
-        action.payload.type === 'main' ||
-        action.payload.type === 'sauce'
-      ) {
-        state.constructorItems.ingredients.push({
-          id: randomId(),
-          ...action.payload
-        });
-      } else {
-        state.error = 'Неизвестный ингредиент, не стоит его добавлять :)';
-        console.log(state.error);
-      }
+    addIngredients: {
+      reducer: (state, { payload }: PayloadAction<TConstructorIngredient>) => {
+        if (payload.type === 'bun') {
+          state.constructorItems.bun = payload;
+        } else if (payload.type === 'main' || payload.type === 'sauce') {
+          state.constructorItems.ingredients.push(payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: { ...ingredient, id: randomId() }
+      })
     },
-    ingredientsToUp: (state, action) => {
-      const currentIngredient =
-        state.constructorItems.ingredients[action.payload];
+    ingredientsToUp: (state, { payload }: PayloadAction<number>) => {
+      const currentIngredient = state.constructorItems.ingredients[payload];
 
       const neighbourIngredient =
-        state.constructorItems.ingredients[action.payload - 1];
+        state.constructorItems.ingredients[payload - 1];
 
       state.constructorItems.ingredients.splice(
-        action.payload - 1,
+        payload - 1,
         2,
         currentIngredient,
         neighbourIngredient
       );
     },
-    ingredientsToDown: (state, action) => {
-      const currentIngredient =
-        state.constructorItems.ingredients[action.payload];
+    ingredientsToDown: (state, { payload }: PayloadAction<number>) => {
+      const currentIngredient = state.constructorItems.ingredients[payload];
 
       const neighbourIngredient =
-        state.constructorItems.ingredients[action.payload + 1];
+        state.constructorItems.ingredients[payload + 1];
 
       state.constructorItems.ingredients.splice(
-        action.payload,
+        payload,
         2,
         neighbourIngredient,
         currentIngredient
       );
     },
-    removeIngredient: (state, action) => {
+    removeIngredient: (
+      state,
+      { payload }: PayloadAction<TConstructorIngredient>
+    ) => {
       state.constructorItems.ingredients =
         state.constructorItems.ingredients.filter(
-          (ingredient) => ingredient.id != action.payload.id
+          (ingredient) => ingredient.id != payload.id
         );
     },
     clearConstructor: (state) => {

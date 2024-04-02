@@ -6,13 +6,13 @@ import { TOrder } from '@utils-types';
 interface IOrderSliceState {
   order: TOrder | null;
   orderIsLoading: boolean;
-  error: string | null;
+  error: string | undefined;
 }
 
 const initialState: IOrderSliceState = {
   order: null,
   orderIsLoading: false,
-  error: null
+  error: undefined
 };
 
 export const fetchOrderBurgerApi = createAsyncThunk(
@@ -40,10 +40,7 @@ const orderSlice = createSlice({
       })
       .addCase(fetchOrderBurgerApi.rejected, (state, action) => {
         state.orderIsLoading = false;
-        action.error.message
-          ? (state.error = action.error.message)
-          : (state.error = '');
-        console.log(state.error);
+        state.error = action.error.message;
       })
       .addCase(fetchOrderBurgerApi.fulfilled, (state, action) => {
         state.orderIsLoading = false;

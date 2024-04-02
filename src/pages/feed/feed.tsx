@@ -17,11 +17,9 @@ export const Feed: FC = () => {
     return <Preloader />;
   }
 
-  return (
-    /*
-    отсутсвие этого return в базовом коде меня просто убило... 
-    7 часов на поиски того, что не так - это просто спасибо большое авторам задания:)
-    */
-    <FeedUI orders={orders} handleGetFeeds={() => dispatch(fetchFeedsApi())} />
-  );
+  const handleGetFeeds = () => {
+    dispatch(fetchFeedsApi());
+  };
+
+  return <FeedUI orders={orders} handleGetFeeds={handleGetFeeds} />;
 };

@@ -1,5 +1,4 @@
 import { FC, useMemo } from 'react';
-import { TConstructorIngredient, TOrder } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import {
@@ -13,8 +12,7 @@ import {
   selectOrderIsLoading
 } from '../../services/slices/orderSlice';
 import { useNavigate } from 'react-router-dom';
-import { selectIsAuthenticated } from '../../services/slices/authSlice';
-import { getCookie } from '../../utils/cookie';
+import { selectUserData } from '../../services/slices/authSlice';
 
 export const BurgerConstructor: FC = () => {
   const items = useSelector(selectConstructorBurger).constructorItems;
@@ -22,24 +20,25 @@ export const BurgerConstructor: FC = () => {
   const orderModalData = useSelector(selectOrder);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isAuthenticated = useSelector(selectUserData).name;
 
   const onOrderClick = () => {
-    console.log(getCookie('accessToken'));
-    if (isAuthenticated) {
-      if (items.bun) {
-        const order: string[] = [
-          items.bun._id,
-          ...items.ingredients.map((ingredient) => ingredient._id),
-          items.bun._id
-        ];
-        dispatch(fetchOrderBurgerApi(order));
-      } else {
-        alert('Сначала соберите свой вкуснейший бургер!');
-      }
-    } else {
+    if (!isAuthenticated) {
       navigate('/login');
     }
+
+    const { bun, ingredients } = items;
+    if (!bun) {
+      alert('Сначала соберите свой вкуснейший бургер!');
+      return;
+    }
+
+    const order: string[] = [
+      bun._id,
+      ...ingredients.map((ingredient) => ingredient._id),
+      bun._id
+    ];
+    dispatch(fetchOrderBurgerApi(order));
   };
 
   const closeOrderModal = () => {
@@ -51,10 +50,7 @@ export const BurgerConstructor: FC = () => {
   const price = useMemo(
     () =>
       (items.bun ? items.bun.price * 2 : 0) +
-      items.ingredients.reduce(
-        (s: number, v: TConstructorIngredient) => s + v.price,
-        0
-      ),
+      items.ingredients.reduce((acc, ingredient) => acc + ingredient.price, 0),
     [items]
   );
 
