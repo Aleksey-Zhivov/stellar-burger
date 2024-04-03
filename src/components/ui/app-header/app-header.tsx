@@ -7,12 +7,15 @@ import {
   Logo,
   ProfileIcon
 } from '@zlden/react-developer-burger-ui-components';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useMatch } from 'react-router-dom';
 import clsx from 'clsx';
 
 export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
   const location = useLocation();
   const currentLocation = location.pathname;
+  const profile = useMatch('/profile');
+  const orders = useMatch('/profile/orders');
+  const ordersNamber = useMatch('/profile/orders/:number');
 
   return (
     <header className={styles.header}>
@@ -58,19 +61,11 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
         </div>
         <div className={styles.link_position_last}>
           <ProfileIcon
-            type={
-              currentLocation === '/profile' ||
-              currentLocation === '/profile/orders' ||
-              currentLocation === '/profile/orders/:number'
-                ? 'primary'
-                : 'secondary'
-            }
+            type={profile || orders || ordersNamber ? 'primary' : 'secondary'}
           />
           <Link
             className={clsx(
-              currentLocation === '/profile' ||
-                currentLocation === '/profile/orders' ||
-                currentLocation === '/profile/orders/:number'
+              profile || orders || ordersNamber
                 ? [styles.link_active, styles.link]
                 : styles.link
             )}
