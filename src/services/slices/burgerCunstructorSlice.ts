@@ -22,7 +22,7 @@ const initialState: IBurgerConstructorSliceState = {
   error: null
 };
 
-export const burgerConstructorSlice = createSlice({
+const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {

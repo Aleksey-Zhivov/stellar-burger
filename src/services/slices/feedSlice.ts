@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { getFeedsApi } from '@api';
+import { getFeedsApi } from '../../utils/burger-api';
 import { TOrder } from '@utils-types';
 
 interface IFeedSliceState {

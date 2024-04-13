@@ -6,7 +6,7 @@ import {
   logoutApi,
   TRegisterData,
   TLoginData
-} from '@api';
+} from '../../utils/burger-api';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
