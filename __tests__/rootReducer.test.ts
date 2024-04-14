@@ -7,22 +7,24 @@ import { orderNuNumberReducer } from '../src/services/slices/orderInfoSlice';
 import { userOrderReducer } from '../src/services/slices/usersOrderSlice';
 import { authReducer } from '../src/services/slices/authSlice';
 
-it('rootReducer Testing', () => {
-  const rootReducer = combineReducers({
-    ingredients: ingredientsReducer,
-    burgerConstructor: burgerConstructorReducer,
-    order: orderReducer,
-    feed: feedReducer,
-    orderByNumber: orderNuNumberReducer,
-    userOrders: userOrderReducer,
-    auth: authReducer
-  });
+describe('Проверка rootReducer', () => {
+  test('Проверка на UNKNOWN_ACTION', () => {
+    const rootReducer = combineReducers({
+      ingredients: ingredientsReducer,
+      burgerConstructor: burgerConstructorReducer,
+      order: orderReducer,
+      feed: feedReducer,
+      orderByNumber: orderNuNumberReducer,
+      userOrders: userOrderReducer,
+      auth: authReducer
+    });
 
-  const store = configureStore({
-    reducer: rootReducer
-  });
+    const store = configureStore({
+      reducer: rootReducer
+    });
 
-  expect(store.getState()).toEqual(
-    rootReducer(undefined, { type: 'UNKNOWN_ACTION' })
-  );
+    expect(store.getState()).toEqual(
+      rootReducer(undefined, { type: 'UNKNOWN_ACTION' })
+    );
+  });
 });
