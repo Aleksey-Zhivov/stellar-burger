@@ -6,7 +6,7 @@ import {
 import { TNewOrderResponse } from '../src/utils/burger-api';
 import { order } from '../src/utils/testData';
 
-describe('Провекра синхронных экшенов заказа', () => {
+describe('Проверка синхронных экшенов отправки заказа', () => {
   test('Очистка заказа', () => {
     const initialState = {
       order: order,
@@ -23,7 +23,7 @@ describe('Провекра синхронных экшенов заказа', ()
   });
 });
 
-describe('Проверка асинхронных экшенов заказа', () => {
+describe('Проверка асинхронных экшенов отправки заказа', () => {
   test('Проверка fetchOrderBurgerApi.pending', async () => {
     const initialState = {
       order: order,
@@ -33,7 +33,7 @@ describe('Проверка асинхронных экшенов заказа', 
 
     const newState = orderReducer(
       initialState,
-      fetchOrderBurgerApi.pending('', [])
+      fetchOrderBurgerApi.pending('pending', [])
     );
 
     expect(newState.orderIsLoading).toBeTruthy;
@@ -48,13 +48,13 @@ describe('Проверка асинхронных экшенов заказа', 
     };
 
     const error: Error = {
-      name: '',
+      name: 'rejected',
       message: 'Ошибка отправки заказа'
     };
 
     const newState = orderReducer(
       initialState,
-      fetchOrderBurgerApi.rejected(error, '', [])
+      fetchOrderBurgerApi.rejected(error, 'rejected', [])
     );
 
     expect(newState.orderIsLoading).toBeFalsy;
@@ -76,7 +76,7 @@ describe('Проверка асинхронных экшенов заказа', 
 
     const newState = orderReducer(
       initialState,
-      fetchOrderBurgerApi.fulfilled(newOrder, '', [])
+      fetchOrderBurgerApi.fulfilled(newOrder, 'fulfilled', [])
     );
 
     expect(newState.order).toEqual(order);

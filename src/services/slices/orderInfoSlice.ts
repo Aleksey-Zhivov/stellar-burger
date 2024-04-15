@@ -36,15 +36,15 @@ const orderByNumberSlice = createSlice({
       .addCase(fetchOrderByNumber.rejected, (state, action) => {
         state.orderIsLoading = false;
         state.error = action.error.message;
-        console.log(state.error);
       })
       .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
         state.orderIsLoading = false;
         state.orders = action.payload.orders;
+        console.log(state.orders);
       });
   }
 });
 
 export const { selectOrdersIsLoading, selectOrders } =
   orderByNumberSlice.selectors;
-export const orderNuNumberReducer = orderByNumberSlice.reducer;
+export const orderByNumberReducer = orderByNumberSlice.reducer;
