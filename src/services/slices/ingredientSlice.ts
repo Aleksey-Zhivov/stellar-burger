@@ -2,6 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { getIngredientsApi } from '../../utils/burger-api';
 import { TConstructorIngredient, TIngredient } from '../../utils/types';
+import { getCookie } from '../../utils/cookie';
 
 interface IIngredientSliceState {
   ingredients: TIngredient[];

@@ -40,7 +40,6 @@ const orderByNumberSlice = createSlice({
       .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
         state.orderIsLoading = false;
         state.orders = action.payload.orders;
-        console.log(state.orders);
       });
   }
 });
