@@ -1,9 +1,5 @@
 {
     "success": true,
     "accessToken": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MDcxNjdhOTdlZGUwMDAxZDA2MmY3MCIsImlhdCI6MTcxMzIxNDgxMCwiZXhwIjoxNzEzMjE2MDEwfQ.iiKJg7b7ZxJB9XzA-66RYU7bNfTZ9IaFFRy6VcSvGLQ",
-    "refreshToken": "c9950bdd2097ecf8a108f6af53938e2040c23c0f212d4119e17a79ac31d0849e29204ce4d9bbd7ce",
-    "user": {
-        "email": "aazhivov@gmail.com",
-        "name": "Пайперуша"
-    }
+    "refreshToken": "c9950bdd2097ecf8a108f6af53938e2040c23c0f212d4119e17a79ac31d0849e29204ce4d9bbd7ce"
 }
