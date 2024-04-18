@@ -9,16 +9,16 @@ import { ingredientsReducer } from './slices/ingredientSlice';
 import { burgerConstructorReducer } from './slices/burgerCunstructorSlice';
 import { orderReducer } from './slices/orderSlice';
 import { feedReducer } from './slices/feedSlice';
-import { orderNuNumberReducer } from './slices/orderInfoSlice';
+import { orderByNumberReducer } from './slices/orderInfoSlice';
 import { authReducer } from './slices/authSlice';
 import { userOrderReducer } from './slices/usersOrderSlice';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   burgerConstructor: burgerConstructorReducer,
   order: orderReducer,
   feed: feedReducer,
-  orderByNumber: orderNuNumberReducer,
+  orderByNumber: orderByNumberReducer,
   userOrders: userOrderReducer,
   auth: authReducer
 });

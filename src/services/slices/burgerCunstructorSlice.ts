@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { TConstructorIngredient, TIngredient } from '@utils-types';
+import { TConstructorIngredient, TIngredient } from '../../utils/types';
 
-const randomId = () => self.crypto.randomUUID();
+const randomId = () => crypto.randomUUID();
 
-interface IBurgerConstructorSliceState {
+export interface IBurgerConstructorSliceState {
   constructorItems: {
     bun: TConstructorIngredient | null;
     ingredients: TConstructorIngredient[];
@@ -22,7 +22,7 @@ const initialState: IBurgerConstructorSliceState = {
   error: null
 };
 
-export const burgerConstructorSlice = createSlice({
+const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {

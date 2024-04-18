@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { orderBurgerApi } from '@api';
-import { TOrder } from '@utils-types';
+import { orderBurgerApi } from '../../utils/burger-api';
+import { TOrder } from '../../utils/types';
 
 interface IOrderSliceState {
   order: TOrder | null;
