@@ -46,49 +46,49 @@ describe('Проверка загрузки ингредиентов и доба
       'Краторная булка N-200i (низ)'
     );
   });
+});
 
-  describe('Проверка работы модальных окон на примере ингредиентов', () => {
-    beforeEach(() => {
-      cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
-      cy.visit('http://localhost:4000/');
-    });
+describe('Проверка работы модальных окон на примере ингредиентов', () => {
+  beforeEach(() => {
+    cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
+    cy.visit('http://localhost:4000/');
+  });
 
-    it('Открытие модального окна с ингредиентом', () => {
-      const ingredient = cy.get(':nth-child(4) > :nth-child(5)');
+  it('Открытие модального окна с ингредиентом', () => {
+    const ingredient = cy.get(':nth-child(4) > :nth-child(5)');
 
-      ingredient.click();
+    ingredient.click();
 
-      const modal = cy.get('#modals > div:first-child');
-      const header = modal.get('div:first-child > h3');
+    const modal = cy.get('#modals > div:first-child');
+    const header = modal.get('div:first-child > h3');
 
-      header.contains('Хрустящие минеральные кольца');
-    });
+    header.contains('Хрустящие минеральные кольца');
+  });
 
-    it('Закрытие модального окна по клику на кнопку Закрыть (крестик)', () => {
-      const ingredient = cy.get(':nth-child(4) > :nth-child(5)');
+  it('Закрытие модального окна по клику на кнопку Закрыть (крестик)', () => {
+    const ingredient = cy.get(':nth-child(4) > :nth-child(5)');
 
-      ingredient.click();
+    ingredient.click();
 
-      const modal = cy.get('#modals > div:first-child').as('modal');
-      const button = modal.get('div:first-child > button > svg');
+    const modal = cy.get('#modals > div:first-child').as('modal');
+    const button = modal.get('div:first-child > button > svg');
 
-      button.click();
+    button.click();
 
-      cy.get('modal').should('not.exist');
-    });
+    cy.get('modal').should('not.exist');
+  });
 
-    it('Закрытие модального окна по клику на оверлей', () => {
-      const ingredient = cy.get(':nth-child(4) > :nth-child(5)');
+  it('Закрытие модального окна по клику на оверлей', () => {
+    const ingredient = cy.get(':nth-child(4) > :nth-child(5)');
 
-      ingredient.click();
+    ingredient.click();
 
-      const modal = cy.get('#modals > div:first-child').as('modal');
-      const overlay = modal.get('#modals > div:nth-child(2)');
+    const modal = cy.get('#modals > div:first-child').as('modal');
+    const overlay = modal.get('#modals > div:nth-child(2)');
 
-      overlay.click({ force: true });
+    overlay.click({ force: true });
 
-      cy.get('modal').should('not.exist');
-    });
+    cy.get('modal').should('not.exist');
   });
 });
 

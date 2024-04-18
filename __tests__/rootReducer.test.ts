@@ -23,8 +23,8 @@ describe('Проверка rootReducer', () => {
       reducer: rootReducer
     });
 
-    expect(store.getState()).toEqual(
-      rootReducer(undefined, { type: 'UNKNOWN_ACTION' })
+    expect(rootReducer(undefined, { type: 'UNKNOWN_ACTION' })).toEqual(
+      store.getState()
     );
   });
 });
